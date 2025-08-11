@@ -34,8 +34,7 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:8080", # Example if your Angular app runs here
-    "http://localhost:4200", # Common Angular development server port
-    f"http://10.6.20.186:4200",
+    "http://localhost:4200", # Common Angular development server por
     # Add your Angular app's production URL here when deployed
 ]
 
@@ -69,4 +68,5 @@ async def read_root():
     Root endpoint for the API, indicates successful server startup.
     Go to /docs for interactive API documentation (Swagger UI).
     """
+
     return {"message": "Welcome to the FastAPI Auth API! Check /docs for API documentation."}
