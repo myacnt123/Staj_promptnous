@@ -2,7 +2,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    SECRET_KEY: str = "lksnFSDkasndkls5932940hgno&7slanJSKDFN" # IMPORTANT: Change this for production!
+    SECRET_KEY: str = "YOURMYSQLPASSWORD" # IMPORTANT: Change this for production!
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DATABASE_URL: str = "mysql+pymysql://staj_proje:Mnj09bnn3998AS+D@localhost:3306/fastapi_users_db"
@@ -12,4 +12,5 @@ class Settings(BaseSettings):
 
 # Create an instance of the Settings class.
 # This 'settings' object is what other modules will import.
+
 settings = Settings()
