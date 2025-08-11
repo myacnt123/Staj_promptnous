@@ -1,0 +1,39 @@
+<mat-card
+  class="prompt-card shadow-sm card-hover cursor-pointer"
+  (click)="onCardClick()"
+>
+  <mat-card-content class="d-flex flex-column h-100">
+    <div class="prompt-content-display text-dark fw-bold mb-3">
+      <div class="prompt-text-box">
+        {{ prompt.content }}
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center text-muted small mt-auto card-footer-info">
+      <div>
+        Yazar: {{ prompt.author_username }}<br />
+        {{ prompt.created_at | date: 'dd.MM.yyyy HH:mm' }}
+      </div>
+
+      <div class="d-flex align-items-center gap-1">
+        <ng-container *ngIf="isFavoritePage">
+          <button mat-icon-button color="warn" (click)="onDeleteFromFavoritesClick($event); $event.stopPropagation()" matTooltip="Favorilerden Kaldır">
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="!isFavoritePage">
+          <button
+            mat-icon-button
+            [color]="prompt.is_liked_by_user ? 'warn' : ''"
+            (click)="toggleLikeUnlike($event); $event.stopPropagation()"
+            matTooltip="{{ prompt.is_liked_by_user ? 'Beğenmekten Vazgeç' : 'Beğen' }}"
+          >
+            <mat-icon>{{ prompt.is_liked_by_user ? 'favorite' : 'favorite_border' }}</mat-icon>
+          </button>
+        </ng-container>
+        <span class="like-count">{{ prompt.no_of_likes }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

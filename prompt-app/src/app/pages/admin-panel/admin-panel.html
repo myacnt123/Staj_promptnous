@@ -1,0 +1,218 @@
+<div class="admin-panel-container">
+  <h2>Admin Paneli</h2>
+
+  <mat-tab-group animationDuration="500ms" dynamicHeight class="mat-elevation-z2">
+    <mat-tab label="Kullanıcı Yönetimi">
+      <div class="tab-content">
+        <h3>Kullanıcılar</h3>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Kullanıcı Ara</mat-label>
+          <input matInput [formControl]="userSearchControl">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div *ngIf="userLoading" class="loading-spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngIf="!userLoading && users.length === 0" class="no-data-message">
+          <p *ngIf="!userSearchControl.value">Hiç kullanıcı bulunamadı.</p>
+          <p *ngIf="userSearchControl.value">Aradığınız kritere uygun kullanıcı bulunamadı.</p>
+        </div>
+
+        <table mat-table [dataSource]="users" class="mat-elevation-z8 full-width-table">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let user"> {{user.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef> Kullanıcı Adı </th>
+            <td mat-cell *matCellDef="let user"> {{user.username}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let user"> {{user.email}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="is_active">
+            <th mat-header-cell *matHeaderCellDef> Aktif </th>
+            <td mat-cell *matCellDef="let user">
+              <mat-icon [color]="user.is_active ? 'primary' : 'warn'">
+                {{ user.is_active ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="is_admin">
+            <th mat-header-cell *matHeaderCellDef> Admin </th>
+            <td mat-cell *matCellDef="let user">
+              <mat-icon [color]="user.is_admin ? 'primary' : 'accent'">
+                {{ user.is_admin ? 'verified_user' : 'person' }}
+              </mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> İşlemler </th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-icon-button
+                      color="{{ user.is_admin ? 'primary' : 'accent' }}"
+                      matTooltip="{{ user.is_admin ? 'Yönetici Haklarını Kaldır' : 'Yönetici Hakları Ver' }}"
+                      (click)="toggleAdminStatus(user)">
+                <mat-icon>{{ user.is_admin ? 'admin_panel_settings' : 'person_add' }}</mat-icon>
+              </button>
+
+              <button mat-icon-button color="warn" matTooltip="Kullanıcıyı Sil" (click)="deleteUser(user.id)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: userDisplayedColumns;"></tr>
+        </table>
+
+        <mat-paginator
+          [length]="userTotalItems"
+          [pageSize]="userPageSize"
+          [pageSizeOptions]="[5, 10, 25, 50]"
+          [pageIndex]="userPageIndex"
+          (page)="onUserPageChange($event)">
+        </mat-paginator>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Prompt Yönetimi">
+      <div class="tab-content">
+        <h3>Promptlar</h3>
+
+
+        <div *ngIf="promptLoading" class="loading-spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngIf="!promptLoading && prompts.length === 0" class="no-data-message">
+          <p *ngIf="!promptSearchControl.value">Hiç prompt bulunamadı.</p>
+          <p *ngIf="promptSearchControl.value">Aradığınız kritere uygun prompt bulunamadı.</p>
+        </div>
+
+        <table mat-table [dataSource]="prompts" class="mat-elevation-z8 full-width-table">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let prompt"> {{prompt.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="content">
+            <th mat-header-cell *matHeaderCellDef> İçerik </th>
+            <td mat-cell *matCellDef="let prompt"> {{prompt.content | slice:0:50}}... </td>
+          </ng-container>
+
+          <ng-container matColumnDef="author_username">
+            <th mat-header-cell *matHeaderCellDef> Yazar </th>
+            <td mat-cell *matCellDef="let prompt"> {{prompt.author_username || 'Bilinmiyor'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="is_public">
+            <th mat-header-cell *matHeaderCellDef> Halka Açık </th>
+            <td mat-cell *matCellDef="let prompt">
+              <mat-icon [color]="prompt.is_public ? 'primary' : 'accent'">
+                {{ prompt.is_public ? 'public' : 'lock' }}
+              </mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> İşlemler </th>
+            <td mat-cell *matCellDef="let prompt">
+              <button mat-icon-button color="warn" matTooltip="Promptu Sil" (click)="deletePrompt(prompt)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="promptDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: promptDisplayedColumns;"></tr>
+        </table>
+
+        <mat-paginator
+          [length]="promptTotalItems"
+          [pageSize]="promptPageSize"
+          [pageSizeOptions]="[5, 10, 25, 50]"
+          [pageIndex]="promptPageIndex"
+          (page)="onPromptPageChange($event)">
+        </mat-paginator>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Label Yönetimi">
+      <div class="tab-content">
+        <h3>Etiket Ekle</h3>
+        <div class="label-add-form">
+          <mat-form-field appearance="outline" class="add-label-input">
+            <mat-label>Yeni Etiket Adı</mat-label>
+            <input matInput [(ngModel)]="newLabelName" (keydown.enter)="createLabel()">
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="createLabel()">
+            Ekle
+          </button>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3>Etiketler</h3>
+
+        <div *ngIf="labelLoading" class="loading-spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngIf="!labelLoading && labels.length === 0" class="no-data-message">
+          <p>Hiç etiket bulunamadı.</p>
+        </div>
+
+        <table mat-table [dataSource]="labels" class="mat-elevation-z8 full-width-table">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let label"> {{label.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Etiket Adı </th>
+            <td mat-cell *matCellDef="let label">
+              <span *ngIf="editingLabelId !== label.id">{{label.name}}</span>
+              <mat-form-field *ngIf="editingLabelId === label.id" class="edit-label-input">
+                <input matInput [(ngModel)]="editedLabelName" (keydown.enter)="saveLabel(label)" (keydown.escape)="cancelEdit()">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> İşlemler </th>
+            <td mat-cell *matCellDef="let label">
+              <ng-container *ngIf="editingLabelId !== label.id">
+                <button mat-icon-button color="accent" matTooltip="Etiketi Düzenle" (click)="startEdit(label)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <mat-button mat-icon-button color="warn" matTooltip="Etiketi Sil" (click)="deleteLabelByName(label.name)">
+                  <mat-icon>delete_forever</mat-icon>
+                  </mat-button>
+              </ng-container>
+              <ng-container *ngIf="editingLabelId === label.id">
+                <button mat-icon-button color="primary" matTooltip="Kaydet" (click)="saveLabel(label)">
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" matTooltip="İptal" (click)="cancelEdit()">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="labelDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: labelDisplayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -1,0 +1,63 @@
+<div class="main-content-container">
+  <mat-card class="page-card">
+    <mat-card-header>
+      <mat-card-title class="page-title">Tüm Promptlar</mat-card-title>
+    </mat-card-header>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+      <button mat-raised-button color="primary" routerLink="/prompt-add" class="add-prompt-button">
+        <mat-icon>add</mat-icon> Yeni Prompt Ekle
+      </button>
+
+
+    </div>
+
+    <mat-card-content>
+      <div class="mb-4">
+        <h6 class="mb-2">Etiketlere Göre Filtrele:</h6>
+        <mat-chip-listbox aria-label="Prompt etiketleri"> <!-- 'multiple' özelliği kaldırıldı -->
+          <mat-chip-option
+            *ngFor="let label of allLabels"
+            [selected]="selectedLabel === label.name"
+          (click)="onLabelChipClick(label.name)"
+          [color]="selectedLabel === label.name ? 'primary' : 'default'">
+
+          {{ label.name }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+
+      <div *ngIf="isLoading" class="loading-spinner-container">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading && prompts.length === 0" class="no-prompts-message">
+        <div *ngIf="searchControl.value || selectedLabel"> <!-- selectedLabels.length > 0 yerine selectedLabel kontrolü -->
+          Aradığınız kriterlere uygun prompt bulunamamıştır.
+        </div>
+        <div *ngIf="!searchControl.value && !selectedLabel"> <!-- selectedLabels.length === 0 yerine !selectedLabel kontrolü -->
+          Henüz hiç prompt bulunmamaktadır.
+        </div>
+      </div>
+
+      <div class="prompts-grid-container" *ngIf="!isLoading && prompts.length > 0">
+        <app-prompt-card
+          *ngFor="let prompt of prompts"
+          [prompt]="prompt"
+          [isFavoritePage]="false"
+          (cardClicked)="goToPromptDetail($event)"
+        ></app-prompt-card>
+      </div>
+
+      <!-- SAYFALAMA BİLEŞENİ -->
+      <mat-paginator
+        *ngIf="totalPrompts > pageSize"
+        [length]="totalPrompts"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+
+    </mat-card-content>
+  </mat-card>
+</div>

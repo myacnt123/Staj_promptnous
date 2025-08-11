@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: "Bahnschrift", "Arial", sans-serif; }
+
+.mat-typography,
+button,
+input,
+textarea,
+select,
+.mat-toolbar,
+.mat-button,
+.mat-menu-item {
+  font-family: 'Bahnschrift', sans-serif !important; /* Kendi fontunuzu buraya yazın */
+}
+.mat-form-field-wrapper,
+.mat-form-field-label,
+.mat-form-field-flex .mat-form-field-label,
+.mat-form-field-flex .mat-input-element {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+.mat-form-field-infix input.mat-input-element {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+.mat-select {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+
+/*
+  BU YENİ KURAL, ÇİP BİLEŞENİ İÇİNDEKİ METNİN FONTUNU AYARLAR.
+*/
+.mat-mdc-chip-action-label {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+
+.mat-icon,
+[class*="mat-"]:not(.mat-icon) {
+  font-family: 'Bahnschrift', sans-serif; /* Diğer mat- sınıfları için font */
+}
+
+.mat-icon {
+  font-family: 'Material Icons' !important;
+}
+
+/* Header bileşenindeki metinler için */
+.app-title, .main-nav {
+  font-family: 'Bahnschrift', sans-serif !important;
+}

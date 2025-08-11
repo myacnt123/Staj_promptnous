@@ -1,0 +1,87 @@
+<div class="profile-container">
+  <h2>Profilim</h2>
+
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>Kullanıcı Bilgileri</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Kullanıcı Adı:</strong> {{ currentUserUsername$ | async }}</p>
+      <p *ngIf="currentUserEmail$ | async"><strong>E-posta:</strong> {{ currentUserEmail$ | async }}</p>
+      <p *ngIf="currentUserFirstName$ | async"><strong>Adı:</strong> {{ currentUserFirstName$ | async }}</p>
+      <p *ngIf="currentUserLastName$ | async"><strong>Soyadı:</strong> {{ currentUserLastName$ | async }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="action-card">
+    <mat-card-header>
+      <mat-card-title>Şifre Değiştir</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="passwordChangeForm" (ngSubmit)="changePassword()">
+        <mat-form-field appearance="fill">
+          <mat-label>Mevcut Şifre</mat-label>
+          <input matInput type="password" formControlName="current_password" required>
+          <mat-error *ngIf="passwordChangeForm.get('current_password')?.hasError('required')">
+            Mevcut şifre gerekli.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Yeni Şifre</mat-label>
+          <input matInput type="password" formControlName="new_password" required>
+          <mat-error *ngIf="passwordChangeForm.get('new_password')?.hasError('required')">
+            Yeni şifre gerekli.
+          </mat-error>
+          <mat-error *ngIf="passwordChangeForm.get('new_password')?.hasError('minlength')">
+            Yeni şifre en az 8 karakter olmalı.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Yeni Şifre (Tekrar)</mat-label>
+          <input matInput type="password" formControlName="new_password_confirm" required>
+          <mat-error *ngIf="passwordChangeForm.get('new_password_confirm')?.hasError('required')">
+            Yeni şifre tekrarı gerekli.
+          </mat-error>
+          <mat-error *ngIf="passwordChangeForm.hasError('mismatch')">
+            Şifreler eşleşmiyor.
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="passwordChangeForm.invalid">
+          Şifreyi Değiştir
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="action-card delete-card">
+    <mat-card-header>
+      <mat-card-title>Hesabı Sil</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Hesabınızı silmek kalıcı bir eylemdir ve geri alınamaz. Devam etmek için şifrenizi girin.</p>
+
+      <mat-form-field appearance="fill" class="full-width-input">
+        <mat-label>Şifrenizi Onaylayın</mat-label>
+        <input matInput type="password" [formControl]="deletePasswordControl" required>
+        <mat-error *ngIf="deletePasswordControl.hasError('required') && deletePasswordControl.touched">
+          Hesabınızı silmek için şifrenizi girmeniz gerekli.
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="warn" (click)="deleteAccount()" [disabled]="deletePasswordControl.invalid">
+        Hesabımı Sil
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  ---
+
+  <div class="logout-section">
+    <button mat-raised-button color="accent" (click)="logout()">
+      Çıkış Yap
+    </button>
+  </div>
+</div>

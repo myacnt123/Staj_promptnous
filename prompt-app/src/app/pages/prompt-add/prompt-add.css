@@ -1,0 +1,111 @@
+/* prompt-add.css */
+
+/* Ana kapsayıcı: Sayfayı dikey ve yatayda ortalar, arka plan gradyanı verir */
+.main-container {
+  background: linear-gradient(135deg, #f0f2f5 0%, #e0e0e0 100%); /* Hafif gradyan arka plan */
+  display: flex; /* Flexbox kullanımı */
+  justify-content: center; /* Yatayda ortalama */
+  align-items: center; /* Dikeyde ortalama */
+  min-height: 100vh; /* Ekranın tüm yüksekliğini kapla */
+  margin: 0; /* Varsayılan marginleri sıfırla */
+  padding: 20px; /* Kenarlardan iç boşluk bırak */
+  box-sizing: border-box; /* Padding'in genişliğe dahil olmasını sağla */
+}
+
+/* Kart stili */
+.prompt-form-card {
+  border-radius: 12px; /* Yumuşak köşeler */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Zarif gölge */
+  padding: 30px; /* İç boşluk */
+  background-color: #ffffff; /* Beyaz kart arka planı */
+  max-width: 600px; /* Belirtilen maksimum genişlik */
+  width: 100%; /* Kapsayıcı genişliğine uyum sağla */
+}
+
+/* Kart başlığı stili */
+.card-title {
+  font-size: 2.2em; /* Başlık font boyutunu büyüt */
+  font-weight: 700; /* Kalın başlık */
+  color: #3f51b5; /* Material Design primary rengi */
+  margin-bottom: 25px; /* Başlık ile form arasında boşluk */
+  letter-spacing: 0.5px; /* Harf aralığı */
+  text-align: center; /* Başlığı ortala */
+  width: 100%; /* Başlığın tam genişliği kaplamasını sağla */
+}
+
+/* Form alanları stili */
+.full-width-input {
+  width: 100%; /* Alanların genişliğini tam yap */
+  margin-bottom: 20px; /* Form alanları arasında boşluk */
+}
+
+mat-label {
+  color: #6a6a6a; /* Label rengi */
+  font-size: 0.95em;
+}
+
+/* Mat-error mesajları */
+mat-error {
+  font-size: 0.8em;
+  color: #f44336; /* Kırmızı hata mesajı rengi */
+  margin-top: 5px;
+}
+
+/* Checkbox stili */
+.public-checkbox {
+  margin-bottom: 25px; /* Checkbox ile buton arasında boşluk */
+}
+
+/* Buton stili */
+.submit-button {
+  height: 50px; /* Buton yüksekliğini artır */
+  font-size: 1.1em; /* Buton font boyutunu büyüt */
+  font-weight: 600; /* Kalın buton yazısı */
+  border-radius: 8px; /* Yumuşak buton köşeleri */
+  width: 100%; /* Tam genişlik */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  display: flex; /* İçindeki spinner'ı hizalamak için flexbox */
+  justify-content: center; /* Yatayda ortala */
+  align-items: center; /* Dikeyde ortala */
+}
+
+.submit-button:hover:not([disabled]) {
+  background-color: #303f9f; /* Hover rengi */
+  box-shadow: 0 6px 15px rgba(63, 81, 181, 0.3); /* Hover'da belirgin gölge */
+  transform: translateY(-2px); /* Hafif yukarı kalkma efekti */
+}
+
+.submit-button[disabled] {
+  background-color: #e0e0e0 !important; /* Disabled buton rengi */
+  color: #a0a0a0 !important; /* Disabled buton yazı rengi */
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Spinner stili */
+mat-spinner {
+  margin-right: 8px; /* Spinner ile yazı arasında boşluk */
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+  .prompt-form-card {
+    padding: 25px; /* Küçük ekranlarda iç boşluğu azalt */
+    margin: 15px; /* Kenarlardan boşluk */
+  }
+
+  .card-title {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+
+  .full-width-input,
+  .public-checkbox {
+    margin-bottom: 15px;
+  }
+
+  .submit-button {
+    height: 45px;
+    font-size: 1em;
+  }
+}
