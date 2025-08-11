@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "YOURMYSQLPASSWORD" # IMPORTANT: Change this for production!
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    DATABASE_URL: str = "mysql+pymysql://staj_proje:Mnj09bnn3998AS+D@localhost:3306/fastapi_users_db"
+    DATABASE_URL: str = "DATABASEURL"
 
     # This tells Pydantic Settings to load variables from a .env file
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
@@ -14,3 +14,4 @@ class Settings(BaseSettings):
 # This 'settings' object is what other modules will import.
 
 settings = Settings()
+
