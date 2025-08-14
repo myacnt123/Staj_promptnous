@@ -13,7 +13,7 @@ from app.api.Rooters.prompts import router as prompts_router
 from app.api.Rooters.users import router as users_router
 from app.api.Rooters.comment import router as comments_router
 from app.api.Rooters.admin import router as admin_router
-
+from app.api.Rooters.totpy import router as totp_router
 # --- Database Initialization ---
 # This line attempts to create all tables defined by SQLAlchemy's Base.metadata.
 # It's suitable for development as it ensures tables exist.
@@ -57,9 +57,9 @@ app.include_router(users_router , tags=["Users"])
 app.include_router(admin_router )
 
 app.include_router(comments_router)
-
+app.include_router(totp_router, tags=["Totp"])
 app.include_router(labels.router)
-
+app.include_router(totp_router)
 # --- Root Endpoint ---
 # For a pure API, the root often just returns a simple message.
 @app.get("/")
@@ -70,3 +70,4 @@ async def read_root():
     """
 
     return {"message": "Welcome to the FastAPI Auth API! Check /docs for API documentation."}
+
