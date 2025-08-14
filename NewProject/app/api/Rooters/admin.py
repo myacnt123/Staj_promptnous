@@ -121,12 +121,13 @@ async def deleted_byadmin_prompt_endpoint( # Changed to async def
     Only accessible by administrators.
     Admins CANNOT delete posts authored by other administrators.
     """
+
     db_prompt = crud.get_prompt(db, prompt_id=prompt_id)
     if not db_prompt:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Prompt not found")
 
     if  db_prompt.user_id == 1 : #is_user_admin_check(db,db_prompt.user_id) or
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this prompt")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to soft delete this prompt")
 
     update_string = "Bu prompt admin tarafından silindi admin_id: " + str(current_admin.id)
     prompt_update = prompt_schemas.PromptCreate(content=update_string)
