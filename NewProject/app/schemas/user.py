@@ -28,6 +28,8 @@ class UserInDB(UserBase):
     id: int # This will be the database-generated ID
     hashed_password: str # This is where the hashed password lives
     is_active: bool
+    totp_enabled: bool = False
+    totp_secret: Optional[str] = None
 
     class Config:
         # Important for Pydantic V2 to work with ORM models.
