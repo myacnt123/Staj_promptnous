@@ -1,0 +1,65 @@
+<div class="main-container">
+  <mat-card class="prompt-form-card">
+    <mat-card-header>
+      <mat-card-title class="card-title">Yeni Prompt Ekle</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="promptForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Prompt İçeriği</mat-label>
+          <textarea
+            matInput
+            formControlName="content"
+            rows="7"
+            placeholder="Prompt metnini buraya yazın..."
+          ></textarea>
+          <mat-error *ngIf="promptForm.get('content')?.hasError('required') && promptForm.get('content')?.touched">
+            Prompt içeriği zorunludur.
+          </mat-error>
+          <mat-error *ngIf="promptForm.get('content')?.hasError('minlength') && promptForm.get('content')?.touched">
+            İçerik en az 5 karakter olmalıdır.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Etiketler</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Etiket seçimi">
+            <mat-chip-row *ngFor="let label of selectedLabels" (removed)="removeLabel(label)">
+              {{ label.name }}
+              <button matChipRemove [attr.aria-label]="'Etiketi kaldır: ' + label.name">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+            <input
+              placeholder="Mevcut etiketlerden seçin..."
+              #labelInput
+              [matChipInputFor]="chipGrid"
+              [matAutocomplete]="auto"
+              formControlName="newLabel"
+            />
+          </mat-chip-grid>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLabel($event)">
+            <mat-option *ngFor="let label of filteredLabels | async" [value]="label.name">
+              {{ label.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-checkbox formControlName="is_public" class="public-checkbox">
+          Herkese Açık Yap
+        </mat-checkbox>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="promptForm.invalid || isLoading"
+          class="submit-button"
+        >
+          <mat-spinner *ngIf="isLoading" color="accent" diameter="20" class="me-2"></mat-spinner>
+          Ekle
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

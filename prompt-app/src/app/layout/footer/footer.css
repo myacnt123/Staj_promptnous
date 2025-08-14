@@ -1,0 +1,56 @@
+/* src/app/layout/footer/footer.css */
+
+.footer-container {
+  background-color: #2C3E50; /* Koyu Gri-Mavi, modern bir görünüm için */
+  color: white;
+  padding: 20px 0;
+  margin-top: auto; /* İçeriğin ekranı doldurmaması durumunda alt bilgiyi en alta sabitler */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Hafif bir gölge */
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column; /* Küçük ekranlarda alt alta */
+  align-items: center;
+  text-align: center;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 0.9em;
+  margin-bottom: 10px; /* Linkler ile arasındaki boşluk */
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap; /* Küçük ekranlarda linklerin sarmalanması için */
+  justify-content: center;
+  gap: 15px; /* Linkler arası boşluk */
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #ECF0F1; /* Hover durumunda daha açık, beyaza yakın bir ton */
+}
+
+/* Orta ve büyük ekranlar için duyarlılık */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row; /* Büyük ekranlarda yan yana */
+    justify-content: space-between; /* İçeriği iki yana yasla */
+    text-align: left;
+  }
+
+  .footer-content p {
+    margin-bottom: 0;
+  }
+}

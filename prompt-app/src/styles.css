@@ -1,0 +1,81 @@
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  height: 100%; /* Body etiketinin HTML etiketinin yüksekliğini kaplamasını sağlar */
+  margin: 0; /* Tarayıcı varsayılan margin'lerini sıfırla */
+  padding: 0; /* Tarayıcı varsayılan padding'lerini sıfırla */
+  display: flex; /* Body'yi bir flex kutusuna dönüştür */
+  flex-direction: column; /* Öğeleri dikey olarak sırala (header, main, footer) */
+  min-height: 100vh; /* Body'nin minimum ekran yüksekliği kadar olmasını sağla (viewport height) */
+}
+
+
+/* app-root'un tüm dikey alanı doldurması ve kendi çocuklarını flex olarak düzenlemesi gerekir. */
+app-root {
+  display: flex; /* app-root'u da flex konteyner yap */
+  flex-direction: column; /* Çocuklarını dikey sırala */
+  flex-grow: 1; /* app-root'un parent'ındaki (body) tüm boşluğu kaplamasını sağlar */
+  height: 100%; /* Kendi parent'ı olan body'nin yüksekliğini devralmasını garantile */
+}
+
+/* Ana içerik alanının (router-outlet'in bulunduğu yer) esnek büyümesini sağlar */
+.app-content-wrapper {
+  flex-grow: 1;
+  display: flex; /* Kendi içindeki içeriği de flex yapısı ile yönetebiliriz */
+  flex-direction: column; /* İçeriğin alt alta sıralanması için */
+  width: 100%; /* Genişliğini ayarla */
+}
+
+/* Angular Material bileşenleri ve ilgili öğeler için font ayarları */
+.mat-typography,
+button,
+input,
+textarea,
+select,
+.mat-toolbar,
+.mat-button,
+.mat-menu-item {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+.mat-form-field-wrapper,
+.mat-form-field-label,
+.mat-form-field-flex .mat-form-field-label,
+.mat-form-field-flex .mat-input-element {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+.mat-form-field-infix input.mat-input-element {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+.mat-select {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+
+/* Çip bileşeni içindeki metnin fontunu ayarlar */
+.mat-mdc-chip-action-label {
+  font-family: 'Bahnschrift', sans-serif !important;
+}
+
+/* Genel mat- sınıfları için font (Mat Icons hariç) */
+.mat-icon,
+[class*="mat-"]:not(.mat-icon) {
+  font-family: 'Bahnschrift', sans-serif;
+}
+
+/* Material Icons için özel font (simge fontu) */
+.mat-icon {
+  font-family: 'Material Icons' !important; /* Material ikonlarının bozulmaması için bu önemlidir */
+}
+
+/* Header bileşenindeki metinler için */
+.app-title, .main-nav {
+  font-family: 'Bahnschrift', sans-serif !important;
+}

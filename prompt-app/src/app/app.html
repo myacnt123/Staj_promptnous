@@ -1,0 +1,8 @@
+<!-- src/app/app.html -->
+
+<app-header></app-header>
+<!-- ⭐ Kritik Düzeltme: app-content-wrapper her zaman flex-grow-1 almalı ⭐ -->
+<main class="app-content-wrapper p-3" [style.width]="showSidebar ? 'auto' : '100%'">
+  <router-outlet></router-outlet>
+</main>
+<app-footer></app-footer>

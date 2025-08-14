@@ -1,0 +1,64 @@
+/* src/app/pages/admin-panel/admin-panel.css */
+
+.admin-panel-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.tab-content {
+  padding: 20px 0;
+}
+
+.full-width-input {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.no-data-message {
+  text-align: center;
+  color: #777;
+  margin-top: 20px;
+}
+
+/* Material Tab Group için stil ayarlamaları */
+.mat-tab-group {
+  margin-top: 20px;
+}
+
+.mat-tab-label {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* Tablo içindeki ikonlar ve butonlar için boşluk */
+td.mat-cell button {
+  margin-right: 5px;
+}

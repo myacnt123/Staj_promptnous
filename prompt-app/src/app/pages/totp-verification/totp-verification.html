@@ -1,0 +1,100 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <mat-card class="w-100" style="max-width: 450px;">
+    <mat-card-header>
+      <mat-card-title class="text-center">İki Faktörlü Doğrulama (2FA)</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="text-center mb-4">Hesabınız için ek güvenlik katmanı oluşturun veya yönetin.</p>
+
+      <!-- Hata mesajı (varsa) -->
+      <div *ngIf="errorMessage" class="error-message mb-3 text-center text-danger">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Giriş akışı sırasında TOTP kodu isteniyorsa (username varsa) -->
+      <div *ngIf="username && password && !showTotpSetupSection" class="totp-login-flow-section">
+        <p class="text-center">Lütfen kimlik doğrulayıcı uygulamanızdan 6 haneli kodu girin.</p>
+        <form [formGroup]="totpForm" (ngSubmit)="onSubmitLoginTotp()" class="mt-3">
+          <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-label>TOTP Kodu</mat-label>
+            <input matInput type="text" formControlName="totp_code" placeholder="6 haneli kod">
+            <mat-error *ngIf="totpForm.get('totp_code')?.hasError('required') && totpForm.get('totp_code')?.touched">
+              Kod gerekli.
+            </mat-error>
+            <mat-error *ngIf="totpForm.get('totp_code')?.hasError('pattern') && totpForm.get('totp_code')?.touched">
+              Geçerli bir 6 haneli kod girin.
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" class="w-100 mb-2" type="submit" [disabled]="totpForm.invalid || isTotpVerifying">
+            <span *ngIf="!isTotpVerifying">Kodu Doğrula</span>
+            <span *ngIf="isTotpVerifying">Doğrulanıyor... <mat-spinner [diameter]="20" class="inline-spinner"></mat-spinner></span>
+          </button>
+          <button mat-button class="w-100" type="button" (click)="goBackToLogin()">Giriş Sayfasına Dön</button>
+        </form>
+      </div>
+
+      <!-- Profilden gelindiyse veya TOTP genel yönetimi içinse (username yoksa) -->
+      <div *ngIf="!username || !password">
+        <!-- TOTP Aktif Değilse ve Kurulum Aşaması Başlamadıysa -->
+        <div *ngIf="!isTotpActive && !showTotpSetupSection" class="totp-status-section">
+          <p>İki faktörlü doğrulama şu anda **devre dışı**. Güvenliğinizi artırmak için aktif edebilirsiniz.</p>
+          <button mat-raised-button color="primary" class="w-100" (click)="initiateTotpSetup()">
+            2FA Kurulumunu Başlat
+          </button>
+        </div>
+
+        <!-- TOTP Aktifse -->
+        <div *ngIf="isTotpActive" class="totp-status-section">
+          <p class="text-success">İki faktörlü doğrulama şu anda **aktif**.</p>
+          <button mat-raised-button color="warn" class="w-100" (click)="deactivateTotp()">
+            2FA'yı Devre Dışı Bırak
+          </button>
+          <button mat-button class="w-100 mt-2" type="button" [routerLink]="['/profile']">Profile Geri Dön</button>
+        </div>
+
+        <!-- TOTP Kurulum Aşaması (QR kodu gösterme ve manuel anahtar) -->
+        <div *ngIf="showTotpSetupSection && !isTotpActive" class="totp-setup-section mt-3">
+          <h4 class="text-center">TOTP Kurulumu</h4>
+          <p class="text-center">Lütfen kimlik doğrulayıcı uygulamanız (örn. Google Authenticator) ile aşağıdaki QR kodunu tarayın **veya manuel anahtarı girin**.</p>
+
+          <!-- ⭐ QR Kodu için Canvas eklendi ⭐ -->
+          <div class="qr-code-container text-center mb-3">
+            <canvas id="qrCanvas"></canvas> <!-- QR kodu buraya çizilecek -->
+            <p class="mt-2 text-muted">Uygulamanızla tarayın</p>
+          </div>
+
+          <div *ngIf="totpSecret" class="secret-display-container text-center">
+            <p>Manuel Anahtar: <br><strong>{{ totpSecret }}</strong></p>
+            <button mat-button (click)="copySecretToClipboard()" class="copy-button">
+              <mat-icon>content_copy</mat-icon> Kopyala
+            </button>
+          </div>
+          <div *ngIf="!totpSecret" class="loading-spinner text-center">
+            <mat-spinner diameter="30"></mat-spinner>
+            <p>Anahtar/QR kodu oluşturuluyor...</p>
+          </div>
+
+          <form [formGroup]="totpForm" (ngSubmit)="verifyTotpSetupFromProfile()" class="mt-3">
+            <mat-form-field appearance="fill" class="w-100 mb-3">
+              <mat-label>Kimlik Doğrulama Kodu</mat-label>
+              <input matInput type="text" formControlName="totp_code" placeholder="6 haneli kod">
+              <mat-error *ngIf="totpForm.get('totp_code')?.hasError('required') && totpForm.get('totp_code')?.touched">
+                Kod gerekli.
+              </mat-error>
+              <mat-error *ngIf="totpForm.get('totp_code')?.hasError('pattern') && totpForm.get('totp_code')?.touched">
+                Geçerli bir 6 haneli kod girin.
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" class="w-100 mb-2" type="submit" [disabled]="totpForm.invalid || isTotpVerifying">
+              <span *ngIf="!isTotpVerifying">2FA'yı Doğrula ve Aktif Et</span>
+              <span *ngIf="isTotpVerifying">Doğrulanıyor... <mat-spinner [diameter]="20" class="inline-spinner"></mat-spinner></span>
+            </button>
+            <button mat-button class="w-100" type="button" (click)="cancelTotpSetup()">İptal</button>
+          </form>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
